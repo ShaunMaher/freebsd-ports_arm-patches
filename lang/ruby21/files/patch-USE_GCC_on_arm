@@ -1,0 +1,14 @@
+This port fails to build using Clang on ARM arch.
+--- ./Makefile.orig	2015-11-20 20:27:15.000000000 +1000
++++ ./Makefile	2015-11-28 22:29:15.553664000 +1000
+@@ -21,6 +21,10 @@
+ LIB_DEPENDS=	libyaml.so:${PORTSDIR}/textproc/libyaml
+ RUN_DEPENDS=	libffi>=0:${PORTSDIR}/devel/libffi
+ 
++.if ${ARCH} == "arm"
++USE_GCC=	yes
++.endif
++
+ CONFIGURE_ARGS=	${RUBY_CONFIGURE_ARGS} \
+ 		--disable-rpath \
+ 		--enable-pthread \

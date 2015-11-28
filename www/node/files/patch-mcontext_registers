@@ -1,0 +1,22 @@
+$FreeBSD: patch-mcontext_registers,v 1.0 2015/11/29
+
+This change allowed compilation to complete but I'm not sure it's correct since
+the format is so different.
+--- node-v4.2.2.orig/deps/v8/src/sampler.cc     2015-11-03 20:00:08.000000000 +0000
++++ node-v4.2.2/deps/v8/src/sampler.cc  2015-11-28 07:15:19.421607000 +0000
+@@ -441,9 +441,12 @@
+   state.sp = reinterpret_cast<Address>(mcontext.mc_rsp);
+   state.fp = reinterpret_cast<Address>(mcontext.mc_rbp);
+ #elif V8_HOST_ARCH_ARM
+-  state.pc = reinterpret_cast<Address>(mcontext.mc_r15);
+-  state.sp = reinterpret_cast<Address>(mcontext.mc_r13);
+-  state.fp = reinterpret_cast<Address>(mcontext.mc_r11);
++  //state.pc = reinterpret_cast<Address>(mcontext.mc_r15);
++  //state.sp = reinterpret_cast<Address>(mcontext.mc_r13);
++  //state.fp = reinterpret_cast<Address>(mcontext.mc_r11);
++  state.pc = reinterpret_cast<Address>(mcontext.__gregs[_REG_PC]);
++  state.sp = reinterpret_cast<Address>(mcontext.__gregs[_REG_SP]);
++  state.sp = reinterpret_cast<Address>(mcontext.__gregs[_REG_R11]);
+ #endif  // V8_HOST_ARCH_*
+ #elif V8_OS_NETBSD
+ #if V8_HOST_ARCH_IA32
