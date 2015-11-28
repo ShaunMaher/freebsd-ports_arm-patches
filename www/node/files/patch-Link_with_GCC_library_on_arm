@@ -1,0 +1,26 @@
+Without libgcc running the resulting binary results in fatal
+  'Undefined symbol "__aeabi_uldivmod"' errors.
+--- node-v4.2.2.orig/deps/v8/tools/gyp/v8.gyp   2015-11-03 20:00:11.000000000 +0000
++++ node-v4.2.2/deps/v8/tools/gyp/v8.gyp        2015-11-28 14:07:14.322420000 +0000
+@@ -1543,9 +1543,18 @@
+         ],
+         ['OS=="freebsd"', {
+             'link_settings': {
+-              'libraries': [
+-                '-L/usr/local/lib -lexecinfo',
+-            ]},
++              'conditions': [
++                ['v8_target_arch=="arm"', {
++                  'libraries': [
++                    '-L/usr/local/lib -lexecinfo -lgcc',
++                  ]
++                }, {
++                  'libraries': [
++                    '-L/usr/local/lib -lexecinfo',
++                  ],
++                }]
++              ],
++            },
+             'sources': [
+               '../../src/base/platform/platform-freebsd.cc',
+               '../../src/base/platform/platform-posix.cc'

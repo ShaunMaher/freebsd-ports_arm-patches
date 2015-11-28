@@ -1,0 +1,15 @@
+This port fails to build using Clang on ARM arch.
+--- ./Makefile.orig	2015-11-13 20:39:49.000000000 +1000
++++ ./Makefile	2015-11-28 22:23:55.629221000 +1000
+@@ -25,6 +25,11 @@
+ SHEBANG_FILES=	${WRKSRC}/src/polkitbackend/toarray.pl
+ GNU_CONFIGURE=	yes
+ USE_LDCONFIG=	yes
++
++.if ${ARCH} == "arm"
++USE_GCC=	yes
++.endif
++
+ CONFIGURE_ARGS=	--disable-gtk-doc-html \
+ 		--without-html-dir \
+ 		--with-authfw=pam \
